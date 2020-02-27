@@ -31,10 +31,7 @@ categories: jekyll update
     </tbody>
 </table>
 <p><b>Note :</b> Contoh diatas dibuat jika pada Routes/api.php laravelnya sbb:
-<pre><code>Route::get('category','categoryController@index');
-Route::post('category','categoryController@store');
-Route::put('category/{id}','categoryController@update');
-Route::delete('category/{id}','categoryController@destroy');</code></pre> 
+<pre><code>Route::resource('category','API\categoryController');</code></pre> 
 Dimana categoryController sebagai Class dan index,store,update,destroy sebagai methode didalam kelasnya, kemudian atribut Classnya hanya id dan name,
 </p>
 
