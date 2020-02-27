@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Sistem Inventory Stock Laravel 6"
+title:  " Web-FullStack: Sistem Inventory Stock Laravel 6"
 date:   2020-02-20 11:31:25 +0700
 categories: jekyll update
 ---
