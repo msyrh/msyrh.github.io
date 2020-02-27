@@ -11,7 +11,7 @@ categories: jekyll update
 
 <p>REST API dapat digunakan oleh situs atau aplikasi apa pun, tidak peduli bahasa apa yang ditulisnya karena permintaan didasarkan pada protokol HTTP universal, dan informasi tersebut biasanya dikembalikan dalam format JSON yang dapat dibaca oleh hampir semua bahasa pemrograman (<a href="https://phpenthusiast.com/blog/what-is-rest-api">sumber</a>).</p>
 <div align="center">
-<img src="/assets/rest-api-laravel6/rest_api.png" width="80%" alt="REST API" >
+<img src="/assets/rest-api-laravel6/rest_api.png" width="100%" alt="REST API" >
 </div>
 <p>Source : <a href="https://phpenthusiast.com/blog/what-is-rest-api">https://phpenthusiast.com/blog/what-is-rest-api</a></p>
 
@@ -59,7 +59,7 @@ Package Laravel yang ditambahkan:
     <li>laravel/passport: 8.4</li>
 </ul>
 
-<h4>2. Proses Implementasi</h4>
+<h4>2. Proses Implementasi Passport</h4>
 <p>Sebelumnya saya belajar dari laman <a href="https://daengweb.id/api-otentikasi-menggunakan-passport-laravel">ini</a>, lanjut saja:</p>
 <ol type="a">
     <li>Pastikan Xampp dan Composer telah terinstall</li>
@@ -85,7 +85,7 @@ Package Laravel yang ditambahkan:
             <li>Buka PhpMyadmin dengan membuka browser, kemudian ketik di url <b>localhost</b> kemudian klik <b>PhpMyadmin</b> </li>
             <li>Buat Database baru dengan nama db_rest_api_inventory (bisa diganti). Caranya, klik <b>New</b> pojok kiri atas, isi nama database, kemudian klik <b>create</b>.
                 <div align="center">
-                <img src="/assets/rest-api-laravel6/buat_db.png" width="80%" alt="database REST API laravel 6" >
+                <img src="/assets/rest-api-laravel6/buat_db.png" width="100%" alt="database REST API laravel 6" >
                 </div>
             </li>
         </ul>
@@ -278,39 +278,371 @@ class UserController extends Controller
             <li>Test Registrasi</li>
                 <p>Isikan url sesuai nama yang telah dibuat di Routes/api.php, yang telah dibuat register, maka <b>localhost:8000/api/register</b>, kemudian isi valuenya contoh:</p>
                     <div align="center">
-                    <img src="/assets/rest-api-laravel6/registrasi.png" width="80%" alt="database REST API laravel 6" >
+                    <img src="/assets/rest-api-laravel6/registrasi.png" width="100%" alt="database REST API laravel 6" >
                     </div>
                 Returnnya:
                     <div align="center">
-                    <img src="/assets/rest-api-laravel6/registrasi_return.png" width="80%" alt="database REST API laravel 6" >
+                    <img src="/assets/rest-api-laravel6/registrasi_return.png" width="100%" alt="database REST API laravel 6" >
                     </div>
             <li>Test Login</li>
             <p>Isikan url sesuai nama yang telah dibuat di Routes/api.php, yang telah dibuat login, maka <b>localhost:8000/api/login</b>, kemudian isi valuenya contoh:</p>
                     <div align="center">
-                    <img src="/assets/rest-api-laravel6/login.png" width="80%" alt="database REST API laravel 6" >
+                    <img src="/assets/rest-api-laravel6/login.png" width="100%" alt="database REST API laravel 6" >
                     </div>
                 Returnnya:
                     <div align="center">
-                    <img src="/assets/rest-api-laravel6/login_return.png" width="80%" alt="database REST API laravel 6" >
+                    <img src="/assets/rest-api-laravel6/login_return.png" width="100%" alt="database REST API laravel 6" >
                     </div>
             <li>Test Details (melihat siapa yang login)
             <p>Copy token hasil login sebelumnya (disarankan dengan return position raw, alasan ketika dalam bentuk json akan ada spasi yang tercopy sehingga token berubah dan akan gagal ketika digunakan, silahkan coba jika penasaran hehe), perhatikan gambar contoh:</p>
                      <div align="center">
-                    <img src="/assets/rest-api-laravel6/raw_token.png" width="80%" alt="database REST API laravel 6" >
+                    <img src="/assets/rest-api-laravel6/raw_token.png" width="100%" alt="database REST API laravel 6" >
                     </div>
             <p>Silahkan Copy Token yang ada didalam  tanda "", Kemudian isikan url sesuai nama yang telah dibuat di Routes/api.php, yang telah dibuat details, maka <b>localhost:8000/api/details</b>, kemudian pindah ke header dan isikan valuenya contoh:</p>
                     <div align="center">
-                    <img src="/assets/rest-api-laravel6/details.png" width="80%" alt="database REST API laravel 6" >
+                    <img src="/assets/rest-api-laravel6/details.png" width="100%" alt="database REST API laravel 6" >
                     </div>
                 <p><b>Note : </b>Pada bagian Authorization diisi Bearer[spasi][token] Alasannya masih mencari tahu.</p>
                 Returnnya:
                     <div align="center">
-                    <img src="/assets/rest-api-laravel6/details_return.png" width="80%" alt="database REST API laravel 6" >
+                    <img src="/assets/rest-api-laravel6/details_return.png" width="100%" alt="database REST API laravel 6" >
                     </div>
-            </li>
+            </li></ul>
+    </li><br>
 
+<h4>3. Proses Menambahkan CRUD </h4>
+    <p>Setelah berhasil membuat authentication dengan Token, kemudian kita coba dengan menambahkan CRUD disertai token, tujuannya agar ketika nanti melakukan kirim dan terima data antara client dan server lebih aman, sekaligus buat belajar, hehe. Adapun tabel yang digunakan adalah category yang didalamnya terdapat atribut nama (id tidak disebut karena wajib).</p>
+    <ol type="a">
+        <li>Membuat Model category serta file migration
+            <p><pre><code>php artisan make:model category -m</code></pre> File akan muncul di App/ dengan nama category.php, serta database/migration/ dengan nama  <b>2020_02_27_030044_create_categories_table.php</b>(contoh).</p>
+        </li>
+        <li>Tambahkan Code di database/migration/2020_02_27_030044_create_categories_table.php
+{%highlight php%}
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateCategoriesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('categories', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('nama');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('categories');
+    }
+}
+{%endhighlight%}         
+        </li>
+        <li>Melakukan migrate
+            <p>Sebelum melakukan migration cek apakah ada file lain di folder database/migration/. jika ada, disarankan pindah terlebih dahulu supaya tidak ikut terexecute sehingga data didatabase terhapus. jika dapat menemukan cara untuk migrate 1 file, maka tidak perlu dilakukan. Untuk migrate ketik perintah : <pre><code>php artisan migrate</code></pre></p>
+        </li>
+        <li>Tambah Code pada Model category, file: app/category.php
+{%highlight php%}
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class category extends Model
+{
+    protected $fillable = ['nama'];
+}
+
+{%endhighlight%}     
+         </li>
+        <li>Membuat Controller untuk category
+            <p>Buat file controller category beserta methode CRUD nya dengan perintah:<pre><code>php artisan make:coontroller --resource</code></pre><b>--resource</b> untuk menambah methode di dalam file/class controller yang dibuat.</p>
+        </li>
+        <li>Tambah Code pada file app/Http/Controllers/API/categoryController.php
+{%highlight php%}
+<?php
+
+namespace App\Http\Controllers\API;
+
+use App\category;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Validator;
+
+class categoryController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $category=category::all();
+        $data=$category->toArray();
+        $response=[
+            'success'=>true,
+            'data'=>$data,
+            'message'=>'Data category berhasil diambil'
+        ];
+        return response()->json($response,200);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $input = $request->all();
+        $validator=Validator::make($input,[
+            'nama'=>'required',
+        ]);
+        if ($validator->fails()){
+            $response=[
+            'success'=>false,
+            'data'=>'Gagal Validasi',
+            'message'=>$validator->errors()
+            ];
+            return response()->json($response,404);
+        }
+        
+        $category=category::create($input);
+        $data = $category->toArray();
+        $response=[
+            'success'=>true,
+            'data'=>$data,
+            'message'=>'Data Category Berhasil disimpan'
+        ];
+        return response()->json($response,200);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $category=category::find($id);
+        $data=$category->toArray();
+
+        if(is_null($category)){
+            $response=[
+                'success'=>false,
+                'data'=>'Kosong',
+                'message'=>'Data Category Tidak Ditemukan.'
+            ];
+            return response()->json($response,404);
+        }
+        $response=[
+            'success'=>true,
+            'data'=>$data,
+            'message'=>'Data Category ditemukan.'
+        ];
+        return response()->json($response,200);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, category $category)
+    {
+        $input = $request->all();
+        $validator=Validator::make($input,[
+            'nama'=>'required'
+        ]);
+        if ($validator->fails()){
+            $response=[
+                'success'=>false,
+                'data'=>'Gagal Validasi',
+                'message'=>$validator->errors()
+            ];
+            return response()->json($response,404);
+        }
+        $category->nama=$input['nama'];
+        $category->save();
+        $data=$category->toArray();
+        $response=[
+            'success'=>true,
+            'data'=>$data,
+            'message'=>'Data Category telah diupdate.'
+        ];
+        return response()->json($response,200);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(category $category)
+    {
+        $category->delete();
+        $data=$category->toArray();
+        $response=[
+            'success'=>true,
+            'data'=>$data,
+            'message'=>'Data Category Berhasil Dihapus.'
+        ];
+        return response()->json($response,200);
+    }
+}
+{%endhighlight%}
+        </li>
+        <li>Tambah Route di dalam file Routes/api.php
+        <pre><code>Route::post('login','API\UserController@login');
+Route::post('register','API\UserController@register');
+Route::group(['middleware'=>'auth:api'], function(){
+    Route::post('details','API\UserController@details');
+    Route::resource('category','API\categoryController'); //tambah ini
+});</code></pre>
+        </li>
+        <li>Jalankan project laravel
+         <pre><code>php artisan serv</code></pre></li>
+        <li>Testing</li>
+            <ul>
+                <li>Login
+                    <p>Login kemudian ambil tokennya</p>
+                    <div align="center">
+                    <img src="/assets/rest-api-laravel6/login.png" width="100%" alt="database REST API laravel 6" >
+                    </div>
+                </li>
+                <li>Tambah Data
+                <p>Tambah tab, isi url, klik tab header dibawah url, tambah key accept, value Application/json, tambah key Authorization, value diisi Bearer[spasi][token yang tadi diambil] </p>
+                    <div align="center">
+                    <img src="/assets/rest-api-laravel6/category_tambah1.png" width="100%" alt="database REST API laravel 6" >
+                    </div>
+                <p>Ganti Tab Params dibawah url, isikan key: nama, value:makanan (contoh). pastikan HTTP protocol POST. Kemudian lihat returnnya:</p>
+                    <div align="center">
+                    <img src="/assets/rest-api-laravel6/category_tambah.png" width="100%" alt="database REST API laravel 6" >
+                    </div>
+                </li>
+                <li>Ubah Data
+                <p>Sama dengan tambah data, hanya ganti value:makanan1 (contoh) dan url ditambahkan id. Pastikan HTTP protocol PUT. kemudian lihat returnnya: </p>
+                    <div align="center">
+                    <img src="/assets/rest-api-laravel6/category_ubahdata.png" width="100%" alt="database REST API laravel 6" >
+                    </div></li>
+                <li>Lihat Data
+                <p>Sama dengan tambah data, hanya params dibiarkan kosong. Pastikan HTTP protocol GET. kemudian lihat returnnya: </p>
+                    <div align="center">
+                    <img src="/assets/rest-api-laravel6/category_ambil_data.png" width="100%" alt="database REST API laravel 6" >
+                    </div>
+                </li>
+                <li>Hapus Data
+                <p>Sama dengan tambah data, hanya params dibiarkan kosong, url ditambahkan id yang akan dihapus. Pastikan HTTP protocol DELETE. kemudian lihat returnnya: </p>
+                    <div align="center">
+                    <img src="/assets/rest-api-laravel6/category_hapusdata.png" width="100%" alt="database REST API laravel 6" >
+                    </div>
+                </li>
+                <li>Lihat Data setelah dihapus
+                <p>Sama dengan tambah data, hanya params dibiarkan kosong. Pastikan HTTP protocol GET. kemudian lihat returnnya:</p>
+                    <div align="center">
+                    <img src="/assets/rest-api-laravel6/category_datakosongdihapus.png" width="100%" alt="database REST API laravel 6" >
+                    </div>
+                </li>
+            </ul>
+    </ol>
+<h4>4. Proses Menambahkan Logout</h4>
+<ol type="a">
+    <li>Tambahkan method logout di API/UserController.php
+{%highlight php%}
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+        $response=[
+            'success'=>true,
+            'message'=>'Selamat Geh Jenengan berhasil keluar'
+        ];
+        return response()->json($response,200);
+    }
+{%endhighlight%}
+    </li>
+    <li>Tambah route di Routes/api.php
+        <pre><code>Route::post('login','API\UserController@login');
+Route::post('register','API\UserController@register');
+Route::group(['middleware'=>'auth:api'], function(){
+        Route::post('details','API\UserController@details');
+        Route::resource('category','API\categoryController'); 
+        Route::post('logout','API\UserController@logout'); //tambah ini
+});</code></pre>
+    </li>
+    <li>Jalankan project dengan perintah 
+    <pre><code>php artisan serv</code></pre>
+    </li>
+    <li>Testing
+        <ul>
+            <li>Lakukan Login dan ambil tokennya.
+                <div align="center">
+                    <img src="/assets/rest-api-laravel6/tlogout_login.png" width="100%" alt="log out REST API laravel 6" >
+                </div>
+            </li>
+            <li>Tambah data setelah Login (bisa disimpan)
+                <p>Isikan Header</p>
+                <div align="center">
+                    <img src="/assets/rest-api-laravel6/tlogout_input1.png" width="100%" alt="logout REST API laravel 6" >
+                </div>
+                <p>Isikan params</p>
+                <div align="center">
+                    <img src="/assets/rest-api-laravel6/tlogout_input2.png" width="100%" alt="logout REST API laravel 6" >
+                </div>
+            </li>
+            <li>Lakukan Log out
+                <div align="center">
+                    <img src="/assets/rest-api-laravel6/tlogout_logout.png" width="100%" alt="log out REST API laravel 6" >
+                </div>
+            </li>
+            <li>Tambah data setelah Log out (tidak bisa karena harus login, untuk membuat token baru)
+                <div align="center">
+                    <img src="/assets/rest-api-laravel6/tlogout_input_aflogout.png" width="100%" alt="log out REST API laravel 6" >
+                </div>
+            </li>
         </ul>
     </li>
-    
-    
 </ol>
+<h4>Kesimpulan</h4>
+<p>Banyak cara yang digunakan untuk mengamankan REST API, namun untuk kali ini menggunakan Passport. Mohon kritik dan sarannya yang membangun jika ada yang keliru. Semoga bermanfaat.</p>
