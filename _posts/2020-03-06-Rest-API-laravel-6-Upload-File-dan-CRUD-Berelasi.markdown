@@ -431,4 +431,4 @@ if($request->hasFile('image')){
 }
 {% endhighlight  %} 
 </p>
-<p>Semoga bermanfaat, mohon kritik dan sarannya.</p>
+<p>Semoga bermanfaat, mohon kritik dan sarannya. Project dapat diunduh <a href="https://github.com/msyrh/Rest_Api_Laravel_6">disini</a>.</p>
