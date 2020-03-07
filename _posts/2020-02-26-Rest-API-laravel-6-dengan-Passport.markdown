@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Backend : Rest API Laravel 6 dengan Passport"
+title:  "Backend : Rest API Laravel 6 dengan Passport dan CRUD"
 date:   2020-02-26 04:31:25 +0700
 categories: jekyll update
 ---
@@ -105,7 +105,7 @@ DB_PASSWORD=        //isi password jika ada </code></pre>
     <p>Setelah berhasil <i>generate</i> token keys kemudian melakukan beberapa konfigurasi</p>
     <ul>
         <li>app/User.php
-            {% highlight php %}
+            {% highlight php linenos  %}
 <?php
 
 namespace App;
